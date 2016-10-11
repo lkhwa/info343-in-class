@@ -3,3 +3,46 @@ body {
     font-size: 20px;
     padding: 1em;
 }
+
+.icon-link {
+    color: #333;
+}
+
+/*exclusive for non-touchscreens, so don't rely on it*/
+.icon-link:hover {
+    color: #F00;
+}
+
+.button-link {
+    color: #333;
+    /*removes underlines from text elements*/
+    /*you can also use this to set decorations*/
+    text-decoration: none;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #222;
+    /*add curvature to corners*/
+    border-radius: 4px;
+    padding: 0.5em 1em;
+    /*em refers to height of current font*/
+    transition: all 500ms;
+}
+
+.button-link:hover {
+    background-color: #CCC;
+}
+
+@keyframes fadeIn{
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fadeIn {
+    animation-name: fadeIn;
+    animation-duration: 1s;
+}
