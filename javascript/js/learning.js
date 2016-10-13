@@ -42,11 +42,14 @@ console.group("PRACTICE: Variables and Basic Types");
 //currently held in the variable `x`, and write the value
 //of `y` to the console log
 
+var y = x;
+console.log("value of y is:", y);
 
 //now assign `y` the numeric value 10
 //what does x contain now? Write it to the console
 
-
+y = 10;
+console.log("value of x is still:", x);
 console.groupEnd();
 
 ///////////////////////////////////////////////////////////
@@ -79,10 +82,18 @@ console.group("PRACTICE: Strings");
 //and assign it the concatenation of `s2` and `s3`
 //then write it to the console so you can verify it worked.
 
+var s2 = "Hello";
+console.log(s2);
+var s3 = "it's me";
+console.log(s3);
+var s4 = s2 + " " + s3;
+console.log(s4);
 
 //use the `.trim()` method to remove the leading and
 //trailing white space from this string
 var withSpaces = "    trim those spaces!     ";
+var trimmedString = withSpaces.trim();
+console.log(trimmedString);
 
 
 console.groupEnd();
@@ -158,8 +169,20 @@ console.group("PRACTICE: Objects");
 //now try adding a property named `web site` (with a space)
 //setting it to some string value...it's tricky...
 
+var course2 = {
+    curriculum: "INFO",
+    number:  340,
+    name: "Introduction to Relational Databases",
+    section: "B",
+    quarter: 1,
+    year: 2016,
+    awesome: true
+}
 
+console.log("course object", course2);
 
+course2['web site'] = 'Wow';
+console.log("after adding property:", course2);
 
 console.groupEnd();
 
@@ -199,11 +222,14 @@ console.group("PRACTICE: Arrays");
 //create another array of playing card suits
 //(clubs, diamonds, hearts, spades)
 
+var suits = ["clubs", "diamonds", "hearts", "spades"];
 
 //then add a new element named "jokers"
 //afer adding it, access it in the array
 //and log it to the console
 
+suits.push("jokers");
+console.log(suits[suits.length - 1]);
 
 
 console.groupEnd();
@@ -287,6 +313,7 @@ console.groupCollapsed("Functions");
 function reverseString(s) {
     var reversed = "";
     var idx;
+    s - String(s);
     for (idx = s.length-1; idx >= 0; idx--) {
         //short form of reversed = reversed + s.charAt(idx)
         reversed += s.charAt(idx);
@@ -297,7 +324,7 @@ function reverseString(s) {
 console.log(reverseString("Help I'm reversed!"));
 
 //but JavaScript functions are also values!
-//the funciton name can be used anywhere you can use a value:
+//the function name can be used anywhere you can use a value:
 //variable assignment, function parameter, etc.
 var fn = reverseString;
 console.log(fn("I'm also reversed!"));
@@ -343,6 +370,19 @@ console.group("PRACTICE: Functions");
 //if they are equal to each other. Then call it a few times
 //with various numbers to test it.
 
+function min(n1, n2) {
+   /*if (n1 - n2 <= 0) {
+        return n1;
+    }
+    return n2;*/
+    return n2 < n1 ? n2 : n1;
+}
+
+console.log(min(1, 3));
+console.log(min(-1, -2));
+console.log(min(3, 1));
+console.log(min(-7, 6));
+console.log(min(1, 1));
 
 console.groupEnd();
 
@@ -417,6 +457,17 @@ function generateRandomNumbers(howMany, minimum, maximum) {
 }
 
 //>>> your code goes here!
+
+var array = generateRandomNumbers(100);
+console.log(array);
+
+function double(number) {
+    number * 2;
+}
+var doubledNumbers = array.forEach(double);
+console.log(doubledNumbers);
+
+
 
 
 //now use the .sort() method on a generated array of random
