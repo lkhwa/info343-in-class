@@ -31,20 +31,60 @@ import "./css/main.css";
 //see https://developer.github.com/v3/search/#search-repositories
 const githubSearchURL = "https://api.github.com/search/repositories?per_page=30&q=";
 
+
+import SearchForm from "./search-form.jsx";
+import Repo from "./repo.jsx";
+
 export default class extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
+    constructor(props) { //immutable
+        super(props); 
+        this.state = { //changeable 
             data: {
-                items: []
+                items: [] 
             }
         };
+    }
+    handleSearch(query) {
+        console.log("searching for", query);
+        fetch(githubSearchURL + query)
+            .then(response => response.json())
+            .then(data => this.setState({
+                data: data,
+                query: query, //saved for paging later
+                page: 1
+            }));
+    }
+
+    handleNextPage() {
+        var nextPageNum = this.state.page + 1;
+        fetch(githubSearchURL + 
+            this.state.query + "&page=" + nextPageNum)
+            .then(response => response.json())
+            .then(data => this.setState({
+                data: data,
+                query: this.state.query, 
+                page: nextPageNum
+            }));
     }
 
     render() {
         return (
             <main className="container">
-                <h1>Hello React!</h1>
+                <h1>Search Repos</h1>
+                <SearchForm placeholder="name of repo"
+                    onSearch={query => this.handleSearch(query)}
+                    />
+                <p>{this.state.data.total_count} repos found</p>
+                <p>
+                    <button className="btn btn-default"
+                        onClick={() => this.handleNextPage()}>
+                        Next Page  
+                    </button>
+                </p>
+                {
+                    this.state.data.items.map(repo => <Repo key={repo.id} repo={repo}/>)
+                }
+
             </main>
         );
     }
