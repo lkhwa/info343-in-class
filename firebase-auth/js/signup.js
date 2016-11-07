@@ -28,3 +28,6 @@ signUpForm.addEventListener("submit", function(evt) {
 
     return false;
 });
+
+/*window.prompt to edit messages*/
+/* reuse input control */
