@@ -26,11 +26,19 @@ var seattleCoords = L.latLng(47.61, -122.33);
 //other map styles may have different zoom ranges
 var defaultZoom = 14;
 
+//array of all markers added to map
+var markers = [];
+
 var map = L.map(mapDiv).setView(seattleCoords, defaultZoom);
 L.tileLayer(osmTiles.url, {
     attribution: osmTiles.attribution
 }).addTo(map);
 
+function clearMarkers() {
+    markers.forEach(function(marker) {
+        map.removeLayer(marker);
+    });
+}
 /**
  * onPosition() is called after a successful geolocation 
  * @param {object} position geolocation position data
@@ -54,6 +62,12 @@ function onPositionError(err) {
     fetchBars(seattleCoords);
 }
 
+map.addEventListener("click", function(event) {
+    //console.log(event);
+    clearMarkers();
+    fetchBars(event.latlng);
+})
+
 //if geolocation services are available, ask the
 //user to reveal their current location
 if (navigator && navigator.geolocation) {
@@ -75,9 +89,44 @@ if (navigator && navigator.geolocation) {
 function fetchBars(latlng) {
     //add a marker for the current location
     var marker = L.marker(latlng).addTo(map);
+    markers.push(marker);
+
     //pan to our current location
     map.panTo(latlng);
 
     //TODO: fetch the nearby bars
     //and add them to the map
+    var url = "/api/v1/search";
+    url += "?lat=" + latlng.lat;
+    url += "&lng=" + latlng.lng;
+    console.log("fetching", url);
+    fetch(url)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data);
+            data.businesses.forEach(function(rec) {
+                var blatlng = L.latLng(rec.location.coordinate.latitude, 
+                    rec.location.coordinate.longitude);
+                var marker = L.circleMarker(blatlng).addTo(map);
+                markers.push(marker);
+
+                var divPopup = document.createElement("div");
+                    var h2 = divPopup.appendChild(document.createElement("h2"));
+                    h2.textContent = rec.name;
+
+                    var img = divPopup.appendChild(document.createElement("img"));
+                    img.src = rec.rating_img_url;
+                    img.alt = "ratig is " + rec.rating + " stars";
+
+                    var imgPrev = divPopup.appendChild(document.createElement("img"));
+                    imgPrev.src = rec.image_url;
+                    img.alt = "preview image of " + rec.name;
+                marker.bindPopup(divPopup);
+            });
+        })
+        .catch(function(err) {
+            console.error(err);
+        });
 } 
